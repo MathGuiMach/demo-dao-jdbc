@@ -3,8 +3,10 @@ package application;
 public class Program {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		
+		Department dep = new Department(1, "Brabos");
+		System.out.println(dep.toString());
+		
 	}
 
 }
