@@ -1,4 +1,4 @@
-package model.dao;
+package model.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,17 +8,18 @@ import java.util.List;
 
 import db.DB;
 import db.DbException;
+import model.dao.DaoSeller;
 import model.entities.Department;
 import model.entities.Seller;
 
-public class SellerDaoJdbc implements Dao<Seller>{
+public class SellerDaoJdbc implements DaoSeller{
 
 	private Connection conn;
 	
 	public SellerDaoJdbc(Connection conn) {
 		this.conn = conn;
 	}
-	
+
 	@Override
 	public Seller findById(Integer id) {
 		PreparedStatement st = null;
@@ -31,15 +32,15 @@ public class SellerDaoJdbc implements Dao<Seller>{
 			rs = st.executeQuery();
 			
 			if(rs.next()) {
-				Seller s = new Seller();
-				s.setId(rs.getInt("id"));
-				s.setName(rs.getString("name"));
-				s.setEmail(rs.getString("email"));
-				s.setBaseSalary(rs.getDouble("basesalary"));
-				s.setBirthDate(rs.getDate("BirthDate"));
-				Department d = new Department(rs.getInt("DepartmentId"),rs.getString("DepName"));
-				s.setDepartment(d);
-				return s; 
+//				Seller s = new Seller();
+//				s.setId(rs.getInt("id"));
+//				s.setName(rs.getString("name"));
+//				s.setEmail(rs.getString("email"));
+//				s.setBaseSalary(rs.getDouble("basesalary"));
+//				s.setBirthDate(rs.getDate("BirthDate"));
+//				Department d = new Department(rs.getInt("DepartmentId"),rs.getString("DepName"));
+//				s.setDepartment(d);
+				return instantiateSeller(rs,instantiateDepartment(rs)); 
 			}
 			return null;
 		}
@@ -76,4 +77,19 @@ public class SellerDaoJdbc implements Dao<Seller>{
 		return null;
 	}
 
+	private Department instantiateDepartment(ResultSet rs) throws SQLException {
+		return new Department(rs.getInt("DepartmentId"),rs.getString("DepName"));
+	}
+	
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+		Seller s = new Seller();
+		s.setId(rs.getInt("id"));
+		s.setName(rs.getString("name"));
+		s.setEmail(rs.getString("email"));
+		s.setBaseSalary(rs.getDouble("basesalary"));
+		s.setBirthDate(rs.getDate("BirthDate"));
+		s.setDepartment(dep);
+		return s;
+	}
+	
 }
