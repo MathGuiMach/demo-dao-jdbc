@@ -8,7 +8,7 @@ public interface Dao<T> {
 	
 	void insert(T obj);
     
-    void update(T obj, String[] params);
+    void update(T obj);
     
     void deleteById(Integer id);
         
